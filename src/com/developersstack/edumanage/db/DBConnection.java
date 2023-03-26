@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DBConnection {
     private static final DBConnection dbConnection = null;
-    private Connection connection;
+    private final Connection connection;
 
     private DBConnection() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -18,10 +18,10 @@ public class DBConnection {
     }
 
     public static DBConnection getInstance() throws SQLException, ClassNotFoundException {
-        return dbConnection==null ? new DBConnection() : dbConnection;
+        return null == dbConnection ? new DBConnection() : dbConnection;
     }
 
-    public Connection getConnection(){
+    public Connection getConnection() {
         return connection;
     }
 }
