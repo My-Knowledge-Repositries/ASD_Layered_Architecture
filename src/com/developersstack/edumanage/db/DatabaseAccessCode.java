@@ -1,6 +1,7 @@
 package com.developersstack.edumanage.db;
 
 import com.developersstack.edumanage.model.Student;
+import com.developersstack.edumanage.model.Teacher;
 import com.developersstack.edumanage.model.User;
 
 import java.sql.Connection;
@@ -61,7 +62,7 @@ public class DatabaseAccessCode {
         PreparedStatement stm = connection.prepareStatement("SELECT * FROM student WHERE student_id=?");
         ResultSet rst = stm.executeQuery();
         if (rst.next()) {
-            return  new Student(
+            return new Student(
                     rst.getString(1),
                     rst.getString(2),
                     rst.getDate(3),
@@ -81,7 +82,7 @@ public class DatabaseAccessCode {
     }
 
     public ArrayList<Student> findAllStudents(String searchText) throws SQLException, ClassNotFoundException {
-        searchText="%"+searchText+"%";
+        searchText = "%" + searchText + "%";
         Connection connection = DBConnection.getInstance().getConnection();
         PreparedStatement stm = connection.prepareStatement("SELECT * FROM student WHERE full_name LIKE ? OR address LIKE ?");
         stm.setString(1, searchText);
@@ -97,10 +98,82 @@ public class DatabaseAccessCode {
         }
         return studentsList;
     }
+
     public boolean deleteStudent(String studentId) throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getInstance().getConnection();
         PreparedStatement stm = connection.prepareStatement("DELETE FROM student WHERE student_id=?");
         stm.setString(1, studentId);
         return stm.executeUpdate() > 0;
     }
+
+    // teacher manage
+    public boolean saveTeacher(Teacher teacher) throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getInstance().getConnection();
+        PreparedStatement stm = connection.prepareStatement("INSERT INTO student VALUES(?,?,?,?)");
+        stm.setString(1, teacher.getCode());
+        stm.setString(2, teacher.getName());
+        stm.setObject(3, teacher.getAddress());
+        stm.setString(4, teacher.getContact());
+        return stm.executeUpdate() > 0;
+    }
+
+    public String findTeacherLastId() throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getInstance().getConnection();
+        PreparedStatement stm = connection.prepareStatement("SELECT teacher_code FROM teacher ORDER BY CAST(SUBSTRING(teacher_code,3) AS UNSIGNED) DESC LIMIT 1");
+        ResultSet rst = stm.executeQuery();
+        if (rst.next()) {
+            return rst.getString(1);
+        }
+        return null;
+    }
+
+    public Student findTeacher(String student_id) throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getInstance().getConnection();
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM teacher WHERE teacher_code=?");
+        ResultSet rst = stm.executeQuery();
+        if (rst.next()) {
+            return new Student(
+                    rst.getString(1),
+                    rst.getString(2),
+                    rst.getDate(3),
+                    rst.getString(4));
+        }
+        return null;
+    }
+
+    public boolean updateTeacher(Teacher teacher) throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getInstance().getConnection();
+        PreparedStatement stm = connection.prepareStatement("UPDATE teacher SET name=?, address=?, contact=? WHERE teacher_code=?");
+        stm.setString(1, teacher.getName());
+        stm.setObject(2, teacher.getAddress());
+        stm.setString(3, teacher.getContact());
+        stm.setString(4, teacher.getCode());
+        return stm.executeUpdate() > 0;
+    }
+
+    public ArrayList<Teacher> findAllteachers(String searchText) throws SQLException, ClassNotFoundException {
+        searchText = "%" + searchText + "%";
+        Connection connection = DBConnection.getInstance().getConnection();
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM teacher WHERE name LIKE ? OR address LIKE ?");
+        stm.setString(1, searchText);
+        stm.setString(2, searchText);
+        ResultSet rst = stm.executeQuery();
+        ArrayList<Teacher> teachersList = new ArrayList<>();
+        while (rst.next()) {
+            teachersList.add(new Teacher(
+                    rst.getString(1),
+                    rst.getString(2),
+                    rst.getString(3),
+                    rst.getString(4)));
+        }
+        return teachersList;
+    }
+
+    public boolean deleteTeacher(String code) throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getInstance().getConnection();
+        PreparedStatement stm = connection.prepareStatement("DELETE FROM teacher WHERE teacher_code=?");
+        stm.setString(1, code);
+        return stm.executeUpdate() > 0;
+    }
+
 }
