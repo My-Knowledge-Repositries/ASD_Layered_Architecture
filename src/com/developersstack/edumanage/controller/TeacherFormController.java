@@ -1,8 +1,8 @@
 package com.developersstack.edumanage.controller;
 
-import com.developersstack.edumanage.db.DatabaseAccessCode;
-import com.developersstack.edumanage.model.Student;
-import com.developersstack.edumanage.model.Teacher;
+import com.developersstack.edumanage.entity.Teacher;
+import com.developersstack.edumanage.repo.custom.TeacherRepo;
+import com.developersstack.edumanage.repo.custom.impl.TeacherRepoImpl;
 import com.developersstack.edumanage.view.tm.TeacherTm;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,8 +32,8 @@ public class TeacherFormController {
     public TableColumn colAddress;
     public TableColumn colOption;
     public TextField txtContact;
-
     String searchText = "";
+    private final TeacherRepo teacherRepo = new TeacherRepoImpl();
 
     public void initialize() {
 
@@ -71,7 +71,7 @@ public class TeacherFormController {
     private void setTableData(String searchText) {
         ObservableList<TeacherTm> obList = FXCollections.observableArrayList();
         try {
-            for (Teacher tm : new DatabaseAccessCode().findAllteachers(searchText)
+            for (Teacher tm : teacherRepo.findAllTeachers(searchText)
             ) {
                 Button btn = new Button("Delete");
                 TeacherTm t = new TeacherTm(
@@ -91,7 +91,7 @@ public class TeacherFormController {
                     Optional<ButtonType> buttonType = alert.showAndWait();
                     if (buttonType.get().equals(ButtonType.YES)) {
                         try {
-                            boolean isDeleted = new DatabaseAccessCode().deleteTeacher(t.getCode());
+                            boolean isDeleted = teacherRepo.deleteTeacher(t.getCode());
                             if (isDeleted) {
                                 new Alert(Alert.AlertType.INFORMATION, "Teacher Deleted!").show();
                                 setTableData(searchText);
@@ -123,9 +123,9 @@ public class TeacherFormController {
                 txtAddress.getText(),
                 txtContact.getText()
         );
-        if (btn.getText().equalsIgnoreCase("Save Student")) {
+        if (btn.getText().equalsIgnoreCase("Save Teacher")) {
             try {
-                boolean isSaved = new DatabaseAccessCode().saveTeacher(teacher);
+                boolean isSaved = teacherRepo.saveTeacher(teacher);
                 if (isSaved) {
                     new Alert(Alert.AlertType.INFORMATION, "Teacher Saved!").show();
                     setTeacherId();
@@ -141,9 +141,9 @@ public class TeacherFormController {
         } else {
 
             try {
-                Student selectedStudent = new DatabaseAccessCode().findStudent(txtId.getText());
-                if (null != selectedStudent) {
-                    boolean isUpdated = new DatabaseAccessCode().updateTeacher(teacher);
+                Teacher selectedTeacher = teacherRepo.findTeacher(txtId.getText());
+                if (null != selectedTeacher) {
+                    boolean isUpdated = teacherRepo.updateTeacher(teacher);
                     if (isUpdated) {
                         new Alert(Alert.AlertType.INFORMATION, "Updated!").show();
                         setTeacherId();
@@ -169,14 +169,14 @@ public class TeacherFormController {
 
     private void setTeacherId() {
         try {
-            String selectedId = new DatabaseAccessCode().findTeacherLastId();
+            String selectedId = teacherRepo.findTeacherLastId();
             if (null != selectedId) {
                 String[] splitData = selectedId.split("-");
                 String lastIdIntegerNumberAsAString = splitData[1];
                 int lastIntegerIdAsInt = Integer.parseInt(lastIdIntegerNumberAsAString);
                 lastIntegerIdAsInt++;
-                String generatedStudentId = "T-" + lastIntegerIdAsInt;
-                txtId.setText(generatedStudentId);
+                String generatedTeacherId = "T-" + lastIntegerIdAsInt;
+                txtId.setText(generatedTeacherId);
             } else {
                 txtId.setText("T-1");
             }

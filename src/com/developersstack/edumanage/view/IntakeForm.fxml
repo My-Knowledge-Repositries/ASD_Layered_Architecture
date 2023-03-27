@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane fx:id="context" prefHeight="482.0" prefWidth="737.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.developersstack.edumanage.controller.IntakeFormController">
    <children>
       <Label layoutX="34.0" layoutY="34.0" text="Intake Management" textFill="#160090">
@@ -21,12 +20,12 @@
          </font>
       </Label>
       <Separator layoutX="34.0" layoutY="62.0" prefHeight="3.0" prefWidth="663.0" />
-      <Button layoutX="610.0" layoutY="34.0" mnemonicParsing="false" onAction="#backToHomeOnAction" style="-fx-background-color: #1A2238;" text="Back to home" textFill="WHITE">
+      <Button layoutX="610.0" layoutY="28.0" mnemonicParsing="false" onAction="#backToHomeOnAction" style="-fx-background-color: #1A2238;" text="Back to home" textFill="WHITE">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button layoutX="503.0" layoutY="34.0" mnemonicParsing="false" onAction="#newIntakeOnAction" style="-fx-background-color: #0D99FF;" text="+ New Intake" textFill="WHITE">
+      <Button layoutX="491.0" layoutY="28.0" mnemonicParsing="false" onAction="#newIntakeOnAction" style="-fx-background-color: #0D99FF;" text="+ New Intake" textFill="WHITE">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
