@@ -91,7 +91,7 @@ public class TeacherFormController {
                     Optional<ButtonType> buttonType = alert.showAndWait();
                     if (buttonType.get().equals(ButtonType.YES)) {
                         try {
-                            boolean isDeleted = teacherRepo.deleteTeacher(t.getCode());
+                            boolean isDeleted = teacherRepo.delete(t.getCode());
                             if (isDeleted) {
                                 new Alert(Alert.AlertType.INFORMATION, "Teacher Deleted!").show();
                                 setTableData(searchText);
@@ -125,7 +125,7 @@ public class TeacherFormController {
         );
         if (btn.getText().equalsIgnoreCase("Save Teacher")) {
             try {
-                boolean isSaved = teacherRepo.saveTeacher(teacher);
+                boolean isSaved = teacherRepo.save(teacher);
                 if (isSaved) {
                     new Alert(Alert.AlertType.INFORMATION, "Teacher Saved!").show();
                     setTeacherId();
@@ -141,9 +141,9 @@ public class TeacherFormController {
         } else {
 
             try {
-                Teacher selectedTeacher = teacherRepo.findTeacher(txtId.getText());
+                Teacher selectedTeacher = teacherRepo.find(txtId.getText());
                 if (null != selectedTeacher) {
-                    boolean isUpdated = teacherRepo.updateTeacher(teacher);
+                    boolean isUpdated = teacherRepo.update(teacher);
                     if (isUpdated) {
                         new Alert(Alert.AlertType.INFORMATION, "Updated!").show();
                         setTeacherId();

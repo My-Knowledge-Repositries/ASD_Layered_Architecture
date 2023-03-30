@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class TeacherRepoImpl implements TeacherRepo {
 
     @Override
-    public boolean saveTeacher(Teacher teacher) throws SQLException, ClassNotFoundException {
+    public boolean save(Teacher teacher) throws SQLException, ClassNotFoundException {
         return CrudUtil.execute("INSERT INTO teacher VALUES(?,?,?,?)",
                 teacher.getCode(), teacher.getName(), teacher.getAddress(), teacher.getContact());
     }
@@ -29,7 +29,7 @@ public class TeacherRepoImpl implements TeacherRepo {
     }
 
     @Override
-    public Teacher findTeacher(String teacherId) throws SQLException, ClassNotFoundException {
+    public Teacher find(String teacherId) throws SQLException, ClassNotFoundException {
         ResultSet rst = CrudUtil.execute("SELECT * FROM teacher WHERE teacher_code=?",teacherId);
         if (rst.next()) {
             return new Teacher(
@@ -42,7 +42,12 @@ public class TeacherRepoImpl implements TeacherRepo {
     }
 
     @Override
-    public boolean updateTeacher(Teacher teacher) throws SQLException, ClassNotFoundException {
+    public ArrayList<Teacher> findAll() {
+        return null;
+    }
+
+    @Override
+    public boolean update(Teacher teacher) throws SQLException, ClassNotFoundException {
         return CrudUtil.execute("UPDATE teacher SET name=?, contact=?, address=? WHERE teacher_code=?",
                 teacher.getName(),teacher.getContact(),teacher.getAddress(),teacher.getCode());
     }
@@ -63,7 +68,7 @@ public class TeacherRepoImpl implements TeacherRepo {
     }
 
     @Override
-    public boolean deleteTeacher(String teacherId) throws SQLException, ClassNotFoundException {
+    public boolean delete(String teacherId) throws SQLException, ClassNotFoundException {
         return CrudUtil.execute("DELETE FROM teacher WHERE teacher_code=?",teacherId);
     }
 }

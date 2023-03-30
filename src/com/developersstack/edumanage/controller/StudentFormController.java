@@ -98,7 +98,7 @@ public class StudentFormController {
                     Optional<ButtonType> buttonType = alert.showAndWait();
                     if (buttonType.get().equals(ButtonType.YES)) {
                         try{
-                            boolean isDeleted = studentRepo.deleteStudent(st.getStudentId());
+                            boolean isDeleted = studentRepo.delete(st.getStudentId());
                             if (isDeleted) {
                                 new Alert(Alert.AlertType.INFORMATION, "Student Deleted!").show();
                                 setTableData(searchText);
@@ -150,7 +150,7 @@ public class StudentFormController {
         );
         if (btn.getText().equalsIgnoreCase("Save Student")) {
             try {
-                boolean isSaved = studentRepo.saveStudent(student);
+                boolean isSaved = studentRepo.save(student);
                 if (isSaved) {
                     new Alert(Alert.AlertType.INFORMATION, "Student Saved!").show();
                     setStudentId();
@@ -166,9 +166,9 @@ public class StudentFormController {
         } else {
 
             try {
-                Student selectedStudent = studentRepo.findStudent(txtId.getText());
+                Student selectedStudent = studentRepo.find(txtId.getText());
                 if (null!=selectedStudent){
-                    boolean isUpdated= studentRepo.updateStudent(student);
+                    boolean isUpdated= studentRepo.update(student);
                     if (isUpdated) {
                         new Alert(Alert.AlertType.INFORMATION, "Updated!").show();
                         setStudentId();

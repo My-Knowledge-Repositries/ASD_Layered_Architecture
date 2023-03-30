@@ -34,7 +34,7 @@ public class SignupFormController {
         User user = new User(firstName, lastName, email, password);
 
         try {
-            if (userRepo.saveUser(user)) {
+            if (userRepo.save(user)) {
                 new Alert(Alert.AlertType.INFORMATION, "Welcome!").show();
                 setUi("LoginForm");
             } else {
