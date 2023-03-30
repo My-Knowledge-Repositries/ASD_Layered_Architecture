@@ -21,58 +21,23 @@ import java.util.ArrayList;
 public class ProgramsFormController {
 
     public AnchorPane context;
-
-
     public TextField txtId;
-
-
     public TextField txtName;
-
-
     public TextField txtSearch;
-
-
     public Button btn;
-
-
     public TableView<ProgramTm> tblPrograms;
-
-
     public TableColumn<?, ?> colId;
-
-
     public TableColumn<?, ?> colName;
-
-
     public TableColumn<?, ?> colTeacher;
-
-
     public TableColumn<?, ?> colTech;
-
-
     public TableColumn<?, ?> colCost;
-
-
     public TableColumn<?, ?> colOption;
-
-
     public TextField txtCost;
-
-
     public ComboBox<String> cmbTeacher;
-
-
     public TextField txtTechnology;
-
-
     public TableView<TechAddTm> tblTechnologies;
-
-
     public TableColumn<?, ?> colTCode;
-
-
     public TableColumn<?, ?> colTName;
-
 
     public TableColumn<?, ?> colTRemove;
 

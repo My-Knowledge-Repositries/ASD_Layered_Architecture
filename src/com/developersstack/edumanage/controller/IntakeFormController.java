@@ -1,8 +1,8 @@
 package com.developersstack.edumanage.controller;
 
-import com.developersstack.edumanage.db.DatabaseAccessCode;
 import com.developersstack.edumanage.entity.Intake;
-import com.developersstack.edumanage.entity.Student;
+import com.developersstack.edumanage.repo.custom.IntakeRepo;
+import com.developersstack.edumanage.repo.custom.impl.IntakeRepoImpl;
 import com.developersstack.edumanage.view.tm.IntakeTm;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,6 +23,7 @@ import java.util.Optional;
 
 public class IntakeFormController {
 
+    private final IntakeRepo intakeRepo = new IntakeRepoImpl();
     public AnchorPane context;
     public TextField txtId;
     public TextField txtSearch;
@@ -73,7 +74,7 @@ public class IntakeFormController {
     private void setTableData(String searchText) {
         ObservableList<IntakeTm> obList = FXCollections.observableArrayList();
         try {
-            for (Intake tm : new DatabaseAccessCode().findAllIntakes(searchText)
+            for (Intake tm : intakeRepo.findAllIntakes(searchText)
             ) {
                 Button btn = new Button("Delete");
                 IntakeTm t = new IntakeTm(
@@ -94,7 +95,7 @@ public class IntakeFormController {
                     Optional<ButtonType> buttonType = alert.showAndWait();
                     if (buttonType.get().equals(ButtonType.YES)) {
                         try {
-                            boolean isDeleted = new DatabaseAccessCode().deleteIntake(t.getIntakeId());
+                            boolean isDeleted = intakeRepo.deleteIntake(t.getIntakeId());
                             if (isDeleted) {
                                 new Alert(Alert.AlertType.INFORMATION, "Intake Deleted!").show();
                                 setTableData(searchText);
@@ -118,7 +119,7 @@ public class IntakeFormController {
 
     private void setIntakeId() {
         try {
-            String selectedId = new DatabaseAccessCode().findIntakeLastId();
+            String selectedId = intakeRepo.findIntakeLastId();
             if (null != selectedId) {
                 String[] splitData = selectedId.split("-");
                 String lastIdIntegerNumberAsAString = splitData[1];
@@ -137,7 +138,7 @@ public class IntakeFormController {
     private void allProgramsId() {
         try {
             cmbProgram.setItems(FXCollections.observableArrayList(
-                    new DatabaseAccessCode().loadAllPrograms()
+                    intakeRepo.loadAllPrograms()
             ));
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -155,6 +156,11 @@ public class IntakeFormController {
         setUi("DashboardForm");
     }
 
+    public void clear() {
+        txtId.clear();
+        txtName.clear();
+    }
+
     public void saveOnAction(ActionEvent actionEvent) {
         Intake intake = new Intake(
                 txtId.getText(),
@@ -162,12 +168,11 @@ public class IntakeFormController {
                 Date.from(txtDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()),
                 cmbProgram.getValue(),
                 Boolean.parseBoolean()
-
         );
 
         if (btn.getText().equalsIgnoreCase("Save Student")) {
             try {
-                boolean isSaved = new DatabaseAccessCode().saveIntake(intake);
+                boolean isSaved = intakeRepo.saveIntake(intake);
                 if (isSaved) {
                     new Alert(Alert.AlertType.INFORMATION, "Student Saved!").show();
                     setIntakeId();
@@ -183,13 +188,13 @@ public class IntakeFormController {
         } else {
 
             try {
-                Intake selectedIntake = new DatabaseAccessCode().findIntake(txtId.getText());
-                if (null!=selectedIntake){
-                    boolean isUpdated= new DatabaseAccessCode().updateIntake(intake);
+                Intake selectedIntake = intakeRepo.findIntake(txtId.getText());
+                if (null != selectedIntake) {
+                    boolean isUpdated = intakeRepo.updateIntake(intake);
                     if (isUpdated) {
                         new Alert(Alert.AlertType.INFORMATION, "Updated!").show();
                         setIntakeId();
-// clear();
+                        clear();
                         setTableData(searchText);
                         btn.setText("Save Student");
                     } else {
